@@ -31,48 +31,58 @@ class ImageCropperSnippet extends ImageCropperSnippets
     {
         $this->setProperties($properties);
 
-        $image = json_decode($this->getProperty('image', '[]'), true);
+        $image = $this->getProperty('image');
 
-        if ($image && isset($image['image'])) {
-            $data = [
-                'image' => $image['image']
-            ];
+        if (!empty($image)) {
+            $data = json_decode($image, true);
 
-            if (isset($image['sizes'])) {
-                foreach ((array) $image['sizes'] as $key => $size) {
-                    $data[$key] = [
-                        'image'     => $size['image'],
-                        'width'     => $size['width'],
-                        'height'    => $size['height']
-                    ];
-                }
+            if (!$data) {
+                $data = [
+                    'image' => $image
+                ];
             }
 
-            $field = $this->getProperty('field', null);
+            if (isset($data['image'])) {
+                $output = [
+                    'image' => $data['image']
+                ];
 
-            if ($field !== null) {
-                if ($field === 'default') {
-                    return $data['image'];
+                if (isset($data['sizes'])) {
+                    foreach ((array) $data['sizes'] as $key => $size) {
+                        $output[$key] = [
+                            'image'     => $size['image'],
+                            'width'     => $size['width'],
+                            'height'    => $size['height']
+                        ];
+                    }
                 }
 
-                if (isset($data[$field])) {
-                    return $data[$field]['image'];
+                $field = $this->getProperty('field', null);
+
+                if ($field !== null) {
+                    if ($field === 'default') {
+                        return $output['image'];
+                    }
+
+                    if (isset($output[$field])) {
+                        return $output[$field]['image'];
+                    }
+
+                    return $this->getProperty('image');
                 }
 
-                return $this->getProperty('image');
+                $attributes = array_merge(['class', 'alt', 'title'], explode(',', $this->getProperty('attributes', '')));
+
+                foreach ((array) $properties as $key => $property) {
+                    if (in_array($key, $attributes, true)) {
+                        $output[$key] = $property;
+                    }
+                }
+
+                return $this->getChunk($this->getProperty('tpl'), $output);
             }
-
-            $attributes = array_merge(['class', 'alt', 'title'], explode(',', $this->getProperty('attributes', '')));
-
-            foreach ((array) $properties as $key => $property) {
-                if (in_array($key, $attributes, true)) {
-                    $data[$key] = $property;
-                }
-            }
-
-            return $this->getChunk($this->getProperty('tpl'), $data);
         }
 
-        return $this->getProperty('image');
+        return '';
     }
 }
