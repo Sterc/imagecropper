@@ -6,6 +6,10 @@
     "version": "1.0.0-pl",
     "package":{
         "elements": {
+            "chunks": [{
+                "name": "imageCropperImageTpl",
+                "file": "image.chunk.tpl"
+            }],
             "snippets": [{
                 "name": "ImageCropper",
                 "file": "imagecropper.snippet.php"
