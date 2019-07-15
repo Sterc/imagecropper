@@ -1,0 +1,38 @@
+{
+    "name": "ImageCropper",
+    "lowCaseName": "imagecropper",
+    "description": "An image cropper solution for MODx Revolution.",
+    "author": "Sterc",
+    "version": "1.0.0-pl",
+    "package":{
+        "elements": {
+            "snippets": [{
+                "name": "ImageCropper",
+                "file": "imagecropper.snippet.php"
+            }],
+            "plugins": [{
+                "name": "ImageCropper",
+                "file": "imagecropper.plugin.php",
+                "events": [
+                    "OnManagerPageInit",
+                    "OnTVInputRenderList",
+                    "OnTVInputPropertiesList"
+                ]
+            }]
+        }
+    },
+    "build":{
+        "readme": "docs/readme.txt",
+        "license": "docs/license.txt",
+        "changelog": "docs/changelog.txt",
+        "resolver": {
+            "after": [
+                "setupoptions.resolver.php",
+                "stercextra.resolver.php"
+            ]
+        },
+        "setupOptions":{
+            "source": "setup.options.php"
+        }
+    }
+}
