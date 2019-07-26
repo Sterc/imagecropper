@@ -30,7 +30,7 @@ ImageCropper.combo.Browser = function(config) {
 };
 
 Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
-    onRender: function(ct, position) {
+    onRender: function(ct, position) {;
         ImageCropper.combo.Browser.superclass.onRender.call(this, ct, position);
 
         this.el.dom.style.position = 'absolute';
@@ -161,7 +161,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
                 var previews = [{
                     key     : 'default',
                     name    : _('imagecropper.default'),
-                    image   : '/' + value.image.replace(/^\/+/g, '')
+                    image   : MODx.ImageCropper.source.baseUrl + value.image.replace(/^\/+/g, '')
                 }];
 
                 if (!Ext.isEmpty(value.sizes || {})) {
@@ -170,7 +170,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
                             previews.push({
                                 key     : key,
                                 name    : this.sizes[key].name,
-                                image   : '/' + value.sizes[key].image.replace(/^\/+/g, '')
+                                image   : MODx.ImageCropper.source.baseUrl + value.sizes[key].image.replace(/^\/+/g, '')
                             });
                         }
                     }
@@ -376,7 +376,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
         if (Ext.isEmpty(this.record.image)) {
             this.cropperImage.dom.src = Ext.BLANK_IMAGE_URL;
         } else {
-            this.cropperImage.dom.src = '/' + this.record.image;
+            this.cropperImage.dom.src = MODx.ImageCropper.source.baseUrl + this.record.image;
         }
 
         var data = this.getCropperDefaultSize(this.cropperDefault);
@@ -628,7 +628,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
                 url         : ImageCropper.config.connector_url,
                 params      : {
                     action          : 'mgr/crop',
-                    image           : this.record.image,
+                    image           : MODx.ImageCropper.source.baseUrl + this.record.image,
                     imageWidth      : this.cropperData.imageWidth,
                     imageHeight     : this.cropperData.imageHeight,
                     cropWidth       : size.width,
@@ -680,7 +680,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
         var preview = Ext.get('imagecropper-preview-' + size);
 
         if (preview) {
-            preview.dom.src = '/' + image.replace(/^\/+/g, '');
+            preview.dom.src = MODx.ImageCropper.source.baseUrl + image.replace(/^\/+/g, '');
         }
     }
 });
@@ -751,7 +751,7 @@ ImageCropper.combo.Preview = function(config) {
 
             data.push({
                 value       : key,
-                boxLabel    : '<img src="/' + preview.replace(/^\/+/g, '') + '" id="imagecropper-preview-' + key + '" alt="' + size.name + '" /><span>' + size.name + '</span>',
+                boxLabel    : '<img src="' + MODx.ImageCropper.source.baseUrl + preview.replace(/^\/+/g, '') + '" id="imagecropper-preview-' + key + '" alt="' + size.name + '" /><span>' + size.name + '</span>',
                 name        : 'size',
                 checked     : key === config.value
             });
