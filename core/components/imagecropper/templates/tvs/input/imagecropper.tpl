@@ -9,6 +9,7 @@
             if (panel) {
                 var fld = MODx.load({
                     xtype       : 'imagecropper-combo-browser',
+                    source      : {/literal}{$source}{literal},
                     sizes       : Ext.decode('{/literal}{$sizes}{literal}'),
                     previews    : {/literal}{$previews}{literal},
                     applyTo     : 'tv{/literal}{$tv->id}{literal}'
