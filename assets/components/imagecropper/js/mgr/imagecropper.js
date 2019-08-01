@@ -80,7 +80,6 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
             listeners           : {
                 'select'            : {
                     fn                  : function(data) {
-                        console.log(data);
                         this.onSelectImage(data.fullRelativeUrl);
 
                         this.fireEvent('select', data);
