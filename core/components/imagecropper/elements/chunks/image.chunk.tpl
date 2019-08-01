@@ -1,1 +1,1 @@
-<img src="[[+desktop.image:default=`[[+image]]`]]" srcset="[[+mobile.image:default=`[[+image]]`]] 768w, [[+desktop.image:default=`[[+image]]`]] 580w" sizes="(max-width: 767px) 768px, 580px" alt="[[+alt]]" />
+<img src="[[+desktop.image:default=`[[+image]]`]]" srcset="[[+mobile.image:default=`[[+image]]`]] 768w, [[+desktop.image:default=`[[+image]]`]] 958w" sizes="(max-width: 767px) 768px, 958px" alt="[[+alt]]" />

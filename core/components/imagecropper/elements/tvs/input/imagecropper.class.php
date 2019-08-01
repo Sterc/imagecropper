@@ -20,6 +20,14 @@ class ImageCropperInputRender extends modTemplateVarInputRender
 
         $this->setPlaceholder('sizes', $this->modx->getOption('sizes', $params, '[]'));
         $this->setPlaceholder('previews', (bool) $this->modx->getOption('previews', $params, 1) ? 'true' : 'false');
+
+        if ($this->modx->resource) {
+            $source = $this->tv->getSource($this->modx->resource->get('context_key'));
+
+            if ($source) {
+                $this->setPlaceholder('source', $source->get('id'));
+            }
+        }
     }
 
     /**

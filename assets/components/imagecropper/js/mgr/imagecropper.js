@@ -80,7 +80,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
             listeners           : {
                 'select'            : {
                     fn                  : function(data) {
-                        this.onSelectImage(data.relativeUrl);
+                        this.onSelectImage(data.fullRelativeUrl);
 
                         this.fireEvent('select', data);
                     },
@@ -376,7 +376,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
         if (Ext.isEmpty(this.record.image)) {
             this.cropperImage.dom.src = Ext.BLANK_IMAGE_URL;
         } else {
-            this.cropperImage.dom.src = '/' + this.record.image;
+            this.cropperImage.dom.src = '/' + this.record.image.replace(/^\/+/g, '');
         }
 
         var data = this.getCropperDefaultSize(this.cropperDefault);
