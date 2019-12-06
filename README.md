@@ -22,3 +22,10 @@ Install the ImageCropper extra for image TV with a crop function.
 | tpl | [optional] The image template. This can be a chunk , `@FILE` or `@INLINE` |
 | usePdoTools | [optional] Set to `true` to use pdoTools in the tpl's and enable fenom. (`@FILE` and `@INLINE` do not require this). Default: `false` |
 | usePdoElementsPath | [optional] Set to `true` to use the system setting `pdotools_elements_path` as a base-path for the `@FILE` includes. If `false`, it uses `core/components/imagecropper/`. Default: `false` |
+
+## Migration
+After installing & setting the TV's you can run the following migrate script to migrate existing values to the new format:
+The required hash can be found after install in your system settings.
+```
+php /assets/components/imagecropper/migration/imagecropper.migrate.php --hash=
+```
