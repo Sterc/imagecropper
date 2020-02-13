@@ -1,16 +1,33 @@
 # MODX ImageCropper
-![ImageCropper version](https://img.shields.io/badge/version-1.0.0-brightgreen.svg) ![MODX Extra by Sterc](https://img.shields.io/badge/extra%20by-sterc-magenta.svg) ![MODX version requirements](https://img.shields.io/badge/modx%20version%20requirement-2.4%2B-blue.svg)
+![ImageCropper version](https://img.shields.io/badge/version-1.2.0-brightgreen.svg) ![MODX Extra by Sterc](https://img.shields.io/badge/extra%20by-sterc-magenta.svg) ![MODX version requirements](https://img.shields.io/badge/modx%20version%20requirement-2.4%2B-blue.svg)
 
 Install the ImageCropper extra for image TV with a crop function. 
 
-## Example snippet call
+## Example snippet call with a template
 
 ```
-{'!ImageCropper' | snippet : [
-    'image          => $_modx->resource.imagecropper,
-    'usePdoTools'   => true,
-    'tpl'           => '@FILE elements/chunks/imagefenom.chunk.tpl'
-]}
+[[!ImageCropper?
+    &image=`TV VALUE`
+    &tpl=`@FILE elements/chunks/imagefenom.chunk.tpl`
+    &usePdoTools=`1`
+]]
+```
+
+## Example snippet call without a template
+
+The following example will return the crop of the desktop. If there is no crop available it will return the original image. The original image is just the default selected image so I would always pThumb (or phpThumbOf) the image.
+
+```
+[[!ImageCropper:pThumb=`w=228&h=298&zc=1`?
+    &image=`TV VALUE`
+    &field=`desktop`
+]]
+```
+
+TV crop config for the snippet example above.
+
+```
+{"desktop": {"name": "Desktop", "size": "228x298"}}
 ```
 
 ## Parameters
@@ -18,14 +35,7 @@ Install the ImageCropper extra for image TV with a crop function.
 | Parameter                  | Description                                                                 |
 |----------------------------|------------------------------------------------------------------------------|
 | image | The value of the TV |
-| field | [optional] The key of the image to return, for example `mobile`. |
+| field | [optional] The key of the image to return, for example `desktop` or `mobile`. |
 | tpl | [optional] The image template. This can be a chunk , `@FILE` or `@INLINE` |
 | usePdoTools | [optional] Set to `true` to use pdoTools in the tpl's and enable fenom. (`@FILE` and `@INLINE` do not require this). Default: `false` |
 | usePdoElementsPath | [optional] Set to `true` to use the system setting `pdotools_elements_path` as a base-path for the `@FILE` includes. If `false`, it uses `core/components/imagecropper/`. Default: `false` |
-
-## Migration
-After installing & setting the TV's you can run the following migrate script to migrate existing values to the new format:
-The required hash can be found after install in your system settings.
-```
-php /assets/components/imagecropper/migration/imagecropper.migrate.php --hash=
-```

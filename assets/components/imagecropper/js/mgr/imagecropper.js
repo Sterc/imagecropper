@@ -23,7 +23,9 @@ ImageCropper.combo.Browser = function(config) {
         trigger1Class   : 'x-form-image-trigger',
         trigger2Action  : 'crop',
         trigger2Class   : 'x-form-crop-trigger',
-        source          : config.source || MODx.config.default_media_source
+        source          : config.source || MODx.config.default_media_source,
+        resource        : config.resource || '0',
+        autoOpen        : config.autoOpen || false
     });
 
     ImageCropper.combo.Browser.superclass.constructor.call(this, config);
@@ -45,9 +47,9 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
         this.fakeEl.dom.style.width = this.el.dom.style.width;
     },
     initTrigger: function() {
-        var triggers = this.trigger.select('.x-form-trigger', true);
+        this.triggers = this.trigger.select('.x-form-trigger', true);
 
-        triggers.each(function(trigger, all, index) {
+        this.triggers.each(function(trigger, all, index) {
             if (index === 0) {
                 Ext.DomHelper.insertBefore(trigger, {tag: 'div', cls: 'x-form-trigger ' + (this.trigger1Class || '')});
             } else {
@@ -59,7 +61,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
 
         ImageCropper.combo.Browser.superclass.initTrigger.call(this);
     },
-    onTrigger1Click : function(btn) {
+    onTrigger1Click : function(event, btn) {
         if (this.browserWindow) {
             this.browserWindow.destroy();
         }
@@ -76,11 +78,11 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
             wctx                : this.wctx || 'web',
             openTo              : this.openTo || '',
             rootId              : this.rootId || '/',
-            hideSourceCombo     : this.hideSourceCombo || false,
+            hideSourceCombo     : this.hideSourceCombo || true,
             listeners           : {
                 'select'            : {
                     fn                  : function(data) {
-                        this.onSelectImage(data.fullRelativeUrl);
+                        this.onSelectImage(data.fullRelativeUrl, event, btn);
 
                         this.fireEvent('select', data);
                     },
@@ -89,7 +91,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
             }
         });
 
-        this.browserWindow.show(btn);
+        this.browserWindow.show(event);
 
         return true;
     },
@@ -108,6 +110,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
             cropperDefault  : Ext.get(btn).dom.dataset.key || '',
             cropperSizes    : this.sizes || {},
             record          : Ext.decode(this.getValue()),
+            resource        : this.resource,
             listeners       : {
                 'select'        : {
                     fn              : function(data) {
@@ -118,14 +121,18 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
             }
         });
 
-        this.cropImageWindow.show(btn);
+        this.cropImageWindow.show(event);
 
         return true;
     },
-    onSelectImage: function(image) {
+    onSelectImage: function(image, event, btn) {
         this.setValue({
             image : image
         });
+
+        if (this.autoOpen) {
+            this.onTrigger2Click(event, btn);
+        }
 
         return this;
     },
@@ -134,7 +141,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
 
         this.el.dom.value = Ext.encode(rawValue);
 
-        this.fakeEl.dom.value = rawValue.image;
+        this.fakeEl.dom.value = rawValue.image.replace(this.basePath, '');
 
         this.onUpdatePreview(rawValue);
 
@@ -628,6 +635,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
                 url         : ImageCropper.config.connector_url,
                 params      : {
                     action          : 'mgr/crop',
+                    resource        : this.resource,
                     image           : this.record.image,
                     imageWidth      : this.cropperData.imageWidth,
                     imageHeight     : this.cropperData.imageHeight,

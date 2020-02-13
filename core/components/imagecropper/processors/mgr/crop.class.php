@@ -20,7 +20,7 @@ class ImageCropperCropProcessor extends modProcessor
      */
     public function initialize()
     {
-        $this->modx->getService('klantenvertellen', 'KlantenVertellen', $this->modx->getOption('klantenvertellen.core_path', null, $this->modx->getOption('core_path') . 'components/klantenvertellen/') . 'model/klantenvertellen/');
+        $this->modx->getService('ImageCropper', 'ImageCropper', $this->modx->getOption('imagecropper.core_path', null, $this->modx->getOption('core_path') . 'components/imagecropper/') . 'model/imagecropper/');
 
         return parent::initialize();
     }
@@ -37,10 +37,19 @@ class ImageCropperCropProcessor extends modProcessor
         if (!empty($image)) {
             if (file_exists($base . $image)) {
                 $imageName      = substr($image, strrpos($image, '/') + 1);
-                $imagePath      = trim(substr($image, 0, strrpos($image, '/') + 1), '/') . '/imagecropper/';
                 $imageExtension = substr($image, strrpos($image, '.') + 1);
                 $imagePrefix    = substr($imageName, 0, strrpos($imageName, '.'));
                 $imageHash      = $this->getProperty('cropWidth') . $this->getProperty('cropHeight') . $this->getProperty('x') . $this->getProperty('y');
+
+                if (empty($this->modx->ImageCropper->config['crop_path'])) {
+                    $imagePath  = trim(substr($image, 0, strrpos($image, '/') + 1), '/') . '/imagecropper/';
+                } else {
+                    $imagePath  = rtrim($this->modx->ImageCropper->config['crop_path'], '/') . '/';
+                }
+
+                $pathPlaceholders = $this->getPlaceholders();
+
+                $imagePath = str_replace(array_keys($pathPlaceholders), array_values($pathPlaceholders), $imagePath);
 
                 if (!is_dir($base . $imagePath)) {
                     if (!mkdir($base . $imagePath)) {
@@ -102,6 +111,22 @@ class ImageCropperCropProcessor extends modProcessor
         }
 
         return $this->failure($this->modx->lexicon('imagecropper.error_image_not_set'));
+    }
+
+    /**
+     * @access public.
+     * @return Array.
+     */
+    public function getPlaceholders()
+    {
+        return [
+            '[[+year]]'     => date('Y'),
+            '[[+month]]'    => date('m'),
+            '[[+day]]'      => date('d'),
+            '[[+user]]'     => $this->modx->getUser()->get('id'),
+            '[[+username]]' => $this->modx->getUser()->get('username'),
+            '[[+resource]]' => $this->getProperty('resource')
+        ];
     }
 }
 

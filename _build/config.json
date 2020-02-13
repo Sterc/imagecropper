@@ -3,7 +3,7 @@
     "lowCaseName": "imagecropper",
     "description": "An image cropper solution for MODx Revolution.",
     "author": "Sterc",
-    "version": "1.1.0-pl",
+    "version": "1.2.0-pl",
     "package":{
         "elements": {
             "chunks": [{
@@ -23,7 +23,20 @@
                     "OnTVInputPropertiesList"
                 ]
             }]
-        }
+        },
+        "systemSettings": [{
+            "type": "combo-boolean",
+            "key": "auto_open_cropper",
+            "value": "1",
+            "area": "imagecropper"
+        },{
+            "key": "crop_path",
+            "value": "assets/crops/",
+            "area": "imagecropper"
+        },{
+            "key": "migration_hash",
+            "area": "imagecropper"
+        }]
     },
     "build":{
         "readme": "docs/readme.txt",

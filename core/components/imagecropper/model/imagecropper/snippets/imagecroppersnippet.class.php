@@ -17,7 +17,9 @@ class ImageCropperSnippet extends ImageCropperSnippets
     public $properties = [
         'attributes'            => '',
         'field'                 => null,
+
         'tpl'                   => '@FILE elements/chunks/image.chunk.tpl',
+
         'usePdoTools'           => false,
         'usePdoElementsPath'    => false
     ];
@@ -44,13 +46,13 @@ class ImageCropperSnippet extends ImageCropperSnippets
 
             if (isset($data['image'])) {
                 $output = [
-                    'image' => $data['image']
+                    'image' => '/' . ltrim($data['image'], '/')
                 ];
 
                 if (isset($data['sizes'])) {
                     foreach ((array) $data['sizes'] as $key => $size) {
                         $output[$key] = [
-                            'image'     => $size['image'],
+                            'image'     =>  '/' . ltrim($size['image'], '/'),
                             'width'     => $size['width'],
                             'height'    => $size['height']
                         ];
@@ -60,15 +62,15 @@ class ImageCropperSnippet extends ImageCropperSnippets
                 $field = $this->getProperty('field', null);
 
                 if ($field !== null) {
-                    if ($field === 'default') {
-                        return $output['image'];
-                    }
-
                     if (isset($output[$field])) {
                         return $output[$field]['image'];
                     }
 
-                    return $this->getProperty('image');
+                    if ($field === 'json') {
+                        return $this->getProperty('image');
+                    }
+
+                    return $output['image'];
                 }
 
                 $attributes = array_merge(['class', 'alt', 'title'], explode(',', $this->getProperty('attributes', '')));
