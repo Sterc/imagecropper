@@ -8,8 +8,7 @@ Install the ImageCropper extra for image TV with a crop function.
 ```
 [[!ImageCropper?
     &image=`TV VALUE`
-    &tpl=`@FILE elements/chunks/imagefenom.chunk.tpl`
-    &usePdoTools=`1`
+    &tpl=`imageCropperImageTpl`
 ]]
 ```
 
