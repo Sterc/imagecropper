@@ -197,8 +197,11 @@ class ImageCropperMigrate extends ImageCropper
     protected function getMediasourcePath($source)
     {
         $mediasource = $this->modx->getObject('modMediaSource', array('id' => $source));
-        $properties = $mediasource->getProperties();
-        return $properties['basePath']['value'];
+        if ($mediasource) {
+            $properties = $mediasource->getProperties();
+            return $properties['basePath']['value'];
+        }
+        return null;
     }
 
 
