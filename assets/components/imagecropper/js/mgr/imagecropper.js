@@ -220,6 +220,7 @@ ImageCropper.window.CropImage = function(config) {
         layout      : 'border',
         items       : [{
             cls         : 'x-window-imagecropper-previews',
+            style       : 'overflow-y: scroll; overflow-x: hidden;',
             region      : 'west',
             width       : 300,
             layout      : 'form',
@@ -233,6 +234,7 @@ ImageCropper.window.CropImage = function(config) {
                     hidden      : true
                 }, {
                     xtype       : 'imagecropper-combo-preview',
+                    style       : 'margin-bottom: 30px;',
                     hideLabel   : true,
                     id          : 'imagecropper-size',
                     name        : 'size',
@@ -253,6 +255,7 @@ ImageCropper.window.CropImage = function(config) {
                 }, {
                     xtype       : 'toolbar',
                     cls         : 'x-window-imagecropper-toolbar',
+                    style       : 'position: fixed; bottom: 40px;top: unset;',
                     items       : ['->', {
                         text        : _('imagecropper.reset'),
                         handler     : this.onResetCropper,
@@ -377,7 +380,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
         this.cropperFieldCanvasWidth    = Ext.getCmp('imagecropper-property-canvas-width');
         this.cropperFieldCanvasHeight   = Ext.getCmp('imagecropper-property-canvas-height');
         this.cropperFieldCanvasX        = Ext.getCmp('imagecropper-property-canvas-x');
-        this.cropperFieldCanvasY        = Ext.getCmp('imagecropper-property-canvas-y');
+        this.cropperFieldCanvasY        =Ext.getCmp('imagecropper-property-canvas-y');
         this.cropperFieldState          = Ext.getCmp('imagecropper-state');
 
         if (Ext.isEmpty(this.record.image)) {
@@ -395,10 +398,10 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
 
         data.width          = data.canvasWidth || data.width;
         data.height         = data.canvasHeight || data.height;
-
+ 
         this.cropper = new Cropper(document.getElementById('imagecropper-property-image'), {
             data                        : data,
-            aspectRatio                 : data.ratio,
+            aspectRatio                 : 'free', //data.ratio,
             viewMode                    : 2,
             dragMode                    : 'none',
             zoomable                    : false,
@@ -456,8 +459,9 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
     setCropperSize: function(size) {
         if (this.isInitialized()) {
             this.cropperSize = size.key;
-
             this.cropper.setData(size);
+            this.cropper.setAspectRatio(size.ratio);
+
         }
     },
     getCropperSize: function(size) {
@@ -522,11 +526,9 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
 
             if (size) {
                 this.setCropperSize(size);
-
-                this.onUpdateCropperMeta();
-                this.onUpdateCropperHistory();
-
-                this.setCropperState('ready');
+                //this.onUpdateCropperMeta();
+                //this.onUpdateCropperHistory();
+                //this.setCropperState('ready');
             }
         }
     },
@@ -598,6 +600,7 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
     },
     onUpdateCropperMeta: function() {
         if (this.isInitialized()) {
+
             var data = this.getCropperSize(this.cropperSize);
 
             if (data) {
@@ -608,6 +611,8 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
 
                 this.cropperFieldCropWidth.setValue(data.width);
                 this.cropperFieldCropHeight.setValue(data.height);
+                this.cropperFieldCanvasWidth.setValue(data.width);
+                this.cropperFieldCanvasHeight.setValue(data.height);
             }
         }
     },
