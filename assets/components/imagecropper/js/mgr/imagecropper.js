@@ -526,9 +526,9 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
 
             if (size) {
                 this.setCropperSize(size);
-                //this.onUpdateCropperMeta();
-                //this.onUpdateCropperHistory();
-                //this.setCropperState('ready');
+                this.onUpdateCropperMeta();
+                this.onUpdateCropperHistory();
+                this.setCropperState('ready');
             }
         }
     },
