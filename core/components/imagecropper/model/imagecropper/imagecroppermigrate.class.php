@@ -177,32 +177,38 @@ class ImageCropperMigrate extends ImageCropper
     }
 
     /**
-     * Check is value is already migrated to JSON format
-     * @param $string
-     *
-     * @return bool
+     * @access protected.
+     * @param String $string.
+     * @return Boolean.
      */
     protected function is_json($string)
     {
-        json_decode($string);
-        return (json_last_error() == JSON_ERROR_NONE) ? TRUE : FALSE;
+        if (json_decode($string)) {
+            return true;
+        }
+
+        return json_last_error() === JSON_ERROR_NONE;
     }
 
     /**
-     * Return basepath of mediasource
-     * @param $source
-     *
-     * @return mixed
+     * @access protected.
+     * @param Integer $source.
+     * @return String.
      */
     protected function getMediasourcePath($source)
     {
-        $mediasource = $this->modx->getObject('modMediaSource', array('id' => $source));
+        $mediasource = $this->modx->getObject('modMediaSource', [
+            'id' => $source
+        ]);
+
         if ($mediasource) {
             $properties = $mediasource->getProperties();
-            return $properties['basePath']['value'];
+
+            if (isset($properties['basePath'])) {
+                return $properties['basePath']['value'];
+            }
         }
-        return null;
+
+        return '';
     }
-
-
 }

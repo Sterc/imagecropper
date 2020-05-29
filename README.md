@@ -1,5 +1,5 @@
 # MODX ImageCropper
-![ImageCropper version](https://img.shields.io/badge/version-1.2.0-brightgreen.svg) ![MODX Extra by Sterc](https://img.shields.io/badge/extra%20by-sterc-magenta.svg) ![MODX version requirements](https://img.shields.io/badge/modx%20version%20requirement-2.4%2B-blue.svg)
+![ImageCropper version](https://img.shields.io/badge/version-1.3.0-brightgreen.svg) ![MODX Extra by Sterc](https://img.shields.io/badge/extra%20by-sterc-magenta.svg) ![MODX version requirements](https://img.shields.io/badge/modx%20version%20requirement-2.4%2B-blue.svg)
 
 Install the ImageCropper extra for image TV with a crop function. 
 

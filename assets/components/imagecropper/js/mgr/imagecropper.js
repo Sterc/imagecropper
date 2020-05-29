@@ -96,7 +96,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
         return true;
     },
     onTrigger2Click: function(event, btn) {
-        if (Ext.isEmpty(this.getValue())) {
+        if (Ext.isEmpty(this.getValue()) || this.getValue() === '{}') {
             return false;
         }
 
@@ -107,7 +107,7 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
         this.cropImageWindow = MODx.load({
             xtype           : 'imagecropper-window-crop-image',
             closeAction     : 'close',
-            cropperDefault  : Ext.get(btn).dom.dataset.key || '',
+            cropperSize     : Ext.get(btn).dom.dataset.key || 'default',
             cropperSizes    : this.sizes || {},
             record          : Ext.decode(this.getValue()),
             resource        : this.resource,
@@ -141,7 +141,11 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
 
         this.el.dom.value = Ext.encode(rawValue);
 
-        this.fakeEl.dom.value = rawValue.image.replace(this.basePath, '');
+        if (rawValue.image) {
+            this.fakeEl.dom.value = rawValue.image.replace(this.basePath, '');
+        } else {
+            this.fakeEl.dom.value = '';
+        }
 
         this.onUpdatePreview(rawValue);
 
@@ -172,23 +176,49 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
                 }];
 
                 if (!Ext.isEmpty(value.sizes || {})) {
-                    for (var key in value.sizes) {
-                        if (this.sizes[key]) {
+                    Ext.iterate(value.sizes, (function(key, data) {
+                        if (this.sizes[key] && data.image) {
                             previews.push({
                                 key     : key,
                                 name    : this.sizes[key].name,
-                                image   : '/' + value.sizes[key].image.replace(/^\/+/g, '')
+                                size    : this.sizes[key].size,
+                                image   : '/' + data.image.replace(/^\/+/g, '')
                             });
                         }
-                    }
+                    }).bind(this));
                 }
 
                 previews.forEach((function(preview) {
-                    var item = this.previewEl.createChild({tag: 'a', href: '#', title: preview.name, cls: 'x-form-imagecropper-preview-image'});
+                    var item = this.previewEl.createChild({
+                        tag     : 'a',
+                        href    : '#',
+                        title   : preview.name,
+                        cls     : 'x-form-imagecropper-preview-image'
+                    });
 
                     if (item) {
-                        item.createChild({tag: 'img', src: preview.image, alt: preview.name, 'data-key': preview.key});
-                        item.createChild({tag: 'span', html: preview.name, 'data-key': preview.key});
+                        item.createChild({
+                            tag         : 'img',
+                            src         : preview.image,
+                            alt         : preview.name,
+                            'data-key'  : preview.key
+                        });
+
+                        item.createChild({
+                            tag         : 'span',
+                            class       : 'x-form-imagecropper-preview-image-title',
+                            html        : preview.name,
+                            'data-key'  : preview.key
+                        });
+
+                        if (preview.size) {
+                            item.createChild({
+                                tag         : 'span',
+                                class       : 'x-form-imagecropper-preview-image-properties',
+                                html        : preview.size,
+                                'data-key'  : preview.key
+                            });
+                        }
 
                         item.on('click', (function(event, btn) {
                             this.onTrigger2Click(event, btn);
@@ -238,24 +268,24 @@ ImageCropper.window.CropImage = function(config) {
                     name        : 'size',
                     anchor      : '100%',
                     record      : config.record || {},
-                    value       : config.cropperDefault || '',
+                    value       : config.cropperSize || '',
                     sizes       : config.cropperSizes || [],
                     listeners   : {
                         'change'     : {
                             fn          : this.onUpdateCropperSize,
                             scope       : this
-                        },
-                        //'change'    : {
-                        //    fn          : this.onCheckCropperSize,
-                        //    scope       : this
-                        //}
+                        }
                     }
                 }, {
                     xtype       : 'toolbar',
                     cls         : 'x-window-imagecropper-toolbar',
-                    items       : ['->', {
+                    items       : [{
+                        text        : '<i class="icon icon-trash"></i>',
+                        handler     : this.onRemoveCropperRecord,
+                        scope       : this
+                    }, '->', {
                         text        : _('imagecropper.reset'),
-                        handler     : this.onResetCropper,
+                        handler     : this.onResetCropperSize,
                         scope       : this
                     }, {
                         text        : _('imagecropper.save'),
@@ -283,25 +313,28 @@ ImageCropper.window.CropImage = function(config) {
             width       : 300,
             layout      : 'form',
             items       : [{
-                cls         : 'x-form-item',
-                id          : 'imagecropper-property-canvas'
-            }, {
-                xtype       : 'modx-panel',
-                cls         : 'x-form-item',
+                xtype       : 'fieldset',
+                title       : _('imagecropper.sets'),
+                id          : 'imagecropper-property-canvas',
+                layout      : 'form',
                 items       : [{
-                    xtype       : 'numberfield',
-                    id          : 'imagecropper-property-crop-width',
-                    name        : 'canvas-height',
-                    width       : 100
-                }, {
-                    xtype       : 'label',
-                    html        : 'x',
-                    style       : 'margin: 0 10px;'
-                }, {
-                    xtype       : 'numberfield',
-                    id          : 'imagecropper-property-crop-height',
-                    name        : 'canvas-width',
-                    width       : 100
+                    xtype       : 'modx-panel',
+                    cls         : 'x-form-item',
+                    items       : [{
+                        xtype       : 'numberfield',
+                        id          : 'imagecropper-property-crop-width',
+                        name        : 'canvas-height',
+                        width       : 100
+                    }, {
+                        xtype       : 'label',
+                        html        : 'x',
+                        style       : 'margin: 0 10px;'
+                    }, {
+                        xtype       : 'numberfield',
+                        id          : 'imagecropper-property-crop-height',
+                        name        : 'canvas-width',
+                        width       : 100
+                    }]
                 }]
             }, {
                 xtype       : 'fieldset',
@@ -365,11 +398,6 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
         return this.cropper;
     },
     onAfterRender: function() {
-        this.cropperRecord  = {
-            image               : this.record.image,
-            sizes               : this.record.sizes || {}
-        };
-
         this.cropperImage               = Ext.get('imagecropper-property-image');
         this.cropperImageSize           = Ext.getCmp('imagecropper-property-canvas');
         this.cropperFieldCropWidth      = Ext.getCmp('imagecropper-property-crop-width');
@@ -380,41 +408,35 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
         this.cropperFieldCanvasY        = Ext.getCmp('imagecropper-property-canvas-y');
         this.cropperFieldState          = Ext.getCmp('imagecropper-state');
 
-        if (Ext.isEmpty(this.record.image)) {
-            this.cropperImage.dom.src = Ext.BLANK_IMAGE_URL;
-        } else {
-            this.cropperImage.dom.src = '/' + this.record.image.replace(/^\/+/g, '');
+        this.cropperState               = 'ready';
+        this.cropperRecord              = this.setCropperRecord();
+        this.cropperSizes               = this.getCropperSizes();
+
+        this.cropperSize                = this.getCropperDefaultSize();
+        this.cropperSizeData            = this.getCropperSizeData();
+
+        if (this.cropperSizeData) {
+            this.cropper = new Cropper(document.getElementById('imagecropper-property-image'), {
+                data                        : this.cropperSizeData,
+                viewMode                    : 2,
+                dragMode                    : 'none',
+                zoomable                    : false,
+                toggleDragModeOnDblclick    : false,
+                autoCropArea                : 1,
+                crop                        : (function(event) {
+                    this.onUpdateCropperCanvas(event.detail);
+                }).bind(this),
+                cropstart                   : (function(event) {
+                    this.setCropperState('start');
+                }).bind(this),
+                cropend                     : (function(event) {
+                    this.setCropperState('stop');
+                }).bind(this),
+                ready                       : (function(event) {
+                    this.onResetCropperSize();
+                }).bind(this),
+            });
         }
-
-        var data = this.getCropperDefaultSize(this.cropperDefault);
-
-        this.cropperSize    = data.key;
-        this.cropperData    = {};
-        this.cropperHistory = {};
-        this.cropperState   = 'ready';
-
-        data.width          = data.canvasWidth || data.width;
-        data.height         = data.canvasHeight || data.height;
-
-        this.cropper = new Cropper(document.getElementById('imagecropper-property-image'), {
-            data                        : data,
-            aspectRatio                 : data.ratio,
-            viewMode                    : 2,
-            dragMode                    : 'none',
-            zoomable                    : false,
-            center                      : true,
-            toggleDragModeOnDblclick    : false,
-            crop                        : (function(event) {
-                this.onUpdateCropperCanvas(event.detail);
-            }).bind(this),
-            cropend                     : (function(event) {
-                this.setCropperState('cropped');
-            }).bind(this),
-            ready                       : (function(event) {
-                this.onUpdateCropperMeta();
-                this.onUpdateCropperHistory();
-            }).bind(this),
-        });
     },
     onResizeCropper: function() {
         if (this.isInitialized(true)) {
@@ -430,11 +452,14 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
     },
     onClose: function(btn) {
         if (this.isInitialized()) {
-            if (this.getCropperState('cropped')) {
+            if (this.cropperState !== 'saved' && this.cropperState !== 'ready') {
                 Ext.MessageBox.confirm(_('imagecropper.changes.title'), _('imagecropper.changes.content'), (function(btn) {
                     if (btn === 'yes') {
                         if (btn.action === 'select') {
-                            this.fireEvent('select', this.cropperRecord);
+                            this.fireEvent('select', {
+                                image   : this.cropperRecord.image || '',
+                                sizes   : this.cropperSizes || {}
+                            });
                         }
 
                         this.close();
@@ -444,7 +469,10 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
                 return false;
             } else {
                 if (btn.action === 'select') {
-                    this.fireEvent('select', this.cropperRecord);
+                    this.fireEvent('select', {
+                        image   : this.cropperRecord.image || '',
+                        sizes   : this.cropperSizes || {}
+                    });
                 }
 
                 this.close();
@@ -453,106 +481,89 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
             this.close();
         }
     },
-    setCropperSize: function(size) {
-        if (this.isInitialized()) {
-            this.cropperSize = size.key;
+    setCropperRecord: function() {
+        var record = {
+            image   : this.record.image || '',
+            sizes   : this.record.sizes || {}
+        };
 
-            this.cropper.setData(size);
-        }
-    },
-    getCropperSize: function(size) {
-        if (this.cropperSizes[size]) {
-            this.cropperSizes[size].key = size;
-
-            var data = this.getCropperSizeData(size);
-
-            if (data) {
-                this.cropperSizes[size].canvasWidth     = data.canvasWidth;
-                this.cropperSizes[size].canvasHeight    = data.canvasHeight;
-                this.cropperSizes[size].x               = data.x;
-                this.cropperSizes[size].y               = data.y;
-            }
-
-            var sizes = this.getCropperSizeFormat(size);
-
-            if (sizes) {
-                this.cropperSizes[size].width           = parseInt(sizes[1]);
-                this.cropperSizes[size].height          = parseInt(sizes[2]);
-                this.cropperSizes[size].ratio           = parseInt(sizes[1]) / parseInt(sizes[2]);
-            }
-
-            return this.cropperSizes[size];
+        if (Ext.isEmpty(record.image)) {
+            this.cropperImage.dom.src = Ext.BLANK_IMAGE_URL;
+        } else {
+            this.cropperImage.dom.src = '/' + record.image.replace(/^\/+/g, '');
         }
 
-        return null;
+        return record;
     },
-    getCropperDefaultSize: function(size) {
-        if (!Ext.isEmpty(size)) {
-            if (this.cropperSizes[size]) {
-                return this.getCropperSize(size);
-            }
-        }
+    getCropperSizes: function() {
+        Ext.iterate(this.cropperSizes, (function(key, data) {
+            if (data['size']) {
+                var size = data['size'].match(/^([0-9]+)x([0-9]+)$/);
 
-        for (var key in this.cropperSizes) {
-            return this.getCropperSize(key);
-        }
+                if (size) {
+                    Ext.applyIf(data, {
+                        key     : key,
+                        width   : parseInt(size[1]),
+                        height  : parseInt(size[2]),
+                        ratio   : parseInt(size[1]) / parseInt(size[2])
+                    });
 
-        return null;
-    },
-    setCropperSizeData: function(size, data) {
-        this.cropperRecord.sizes[size] = data;
-    },
-    getCropperSizeData: function(size) {
-        if (this.cropperRecord.sizes[size]) {
-            return this.cropperRecord.sizes[size];
-        }
-
-        return null;
-    },
-    getCropperSizeFormat: function(size) {
-        if (this.cropperSizes[size]) {
-            return this.cropperSizes[size].size.match(/^([0-9]+)x([0-9]+)$/);
-        }
-
-        return null;
-    },
-    onUpdateCropperSize: function(tf) {
-        if (this.isInitialized()) {
-            var size = this.getCropperSize(tf.getValue().value);
-
-            if (size) {
-                this.setCropperSize(size);
-
-                this.onUpdateCropperMeta();
-                this.onUpdateCropperHistory();
-
-                this.setCropperState('ready');
-            }
-        }
-    },
-    onCheckCropperSize: function(tf, record) {
-        if (this.isInitialized()) {
-            if (this.getCropperState('cropped')) {
-                Ext.MessageBox.confirm(_('imagecropper.changes.title'), _('imagecropper.changes.content'), function(btn) {
-                    if (btn === 'yes') {
-                        //tf.setValue(record.data.key).fireEvent('select', tf);
+                    if (this.cropperRecord.sizes[key]) {
+                        Ext.apply(data, this.cropperRecord.sizes[key]);
                     }
-                });
 
-                return false;
+                    this.cropperSizes[key] = data;
+                }
             }
+        }).bind(this));
+
+        return this.cropperSizes;
+    },
+    getCropperDefaultSize: function() {
+        if (this.cropperSize === 'default') {
+            return Object.keys(this.cropperSizes)[0];
         }
+
+        return this.cropperSize;
+    },
+    setCropperSizeData: function(data) {
+        this.cropperSizes[this.cropperSize] = data;
+    },
+    getCropperSizeData: function() {
+        if (this.cropperSizes[this.cropperSize]) {
+            return JSON.parse(JSON.stringify(this.cropperSizes[this.cropperSize]));
+        }
+
+        return {};
+    },
+    getCropperCanvasData: function() {
+        var imageData   = this.cropper.getImageData();
+        var canvasData  = this.cropper.getData();
+        var sizeData    = this.getCropperSizeData();
+
+        return {
+            width           : sizeData.width,
+            height          : sizeData.height,
+            imageWidth      : imageData.naturalWidth,
+            imageHeight     : imageData.naturalHeight,
+            canvasWidth     : Math.round(canvasData.width),
+            canvasHeight    : Math.round(canvasData.height),
+            x               : Math.round(canvasData.x),
+            y               : Math.round(canvasData.y)
+        };
     },
     setCropperState: function(state, content) {
         if (this.isInitialized()) {
             this.cropperState = state;
 
-            this.cropperFieldState.removeClass('green').removeClass('red').removeClass('loading');
+            this.cropperFieldState.removeClass('red');
+            this.cropperFieldState.removeClass('green');
+            this.cropperFieldState.removeClass('loading');
 
-            if (state === 'saved') {
-                this.cropperFieldState.show().addClass('green').update(_('imagecropper.changes_saved'));
-            } else if (state === 'cropped') {
+            if (state === 'start' || state === 'stop') {
                 this.cropperFieldState.show().addClass('red').update(_('imagecropper.changes_unsaved'));
+            } else if (state === 'saved') {
+                this.cropperFieldState.show().addClass('green').update(_('imagecropper.changes_saved'));
             } else if (state === 'saving') {
                 this.cropperFieldState.show().addClass('loading').update(_('imagecropper.saving'));
             } else if (state === 'failure') {
@@ -561,67 +572,85 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
                 this.cropperFieldState.hide();
             }
 
-            var cropperSize = Ext.getCmp('imagecropper-size');
+            var sizes = Ext.getCmp('imagecropper-size');
 
-            if (cropperSize) {
-                if (state === 'saved' || state === 'ready') {
-                    cropperSize.enableAll();
+            if (sizes) {
+                if (this.cropperState === 'saved' || this.cropperState === 'ready') {
+                    sizes.enableAll();
                 } else {
-                    cropperSize.disableAll(this.cropperSize);
+                    sizes.disableAll(this.cropperSize);
                 }
             }
-        }
-
-        return state;
-    },
-    getCropperState: function(state) {
-        if (state) {
-            return this.cropperState === state;
         }
 
         return this.cropperState;
     },
     onUpdateCropperCanvas: function(event) {
         if (this.isInitialized()) {
-            var data = this.getCropperData(event);
+            var data = this.getCropperCanvasData(event);
 
             if (data) {
+                this.cropperImageSize.setTitle(_('imagecropper.property.original', {
+                    width   : data.imageWidth,
+                    height  : data.imageHeight
+                }));
+
+                this.cropperFieldCropWidth.setValue(data.width);
+                this.cropperFieldCropHeight.setValue(data.height);
+
                 this.cropperFieldCanvasWidth.setValue(data.canvasWidth);
                 this.cropperFieldCanvasHeight.setValue(data.canvasHeight);
 
                 this.cropperFieldCanvasX.setValue(data.x);
                 this.cropperFieldCanvasY.setValue(data.y);
-
-                this.cropperData = data;
             }
         }
     },
-    onUpdateCropperMeta: function() {
+    onUpdateCropperImage: function(image) {
         if (this.isInitialized()) {
-            var data = this.getCropperSize(this.cropperSize);
+            var previewImage = Ext.get('imagecropper-preview-' + this.cropperSize);
+
+            if (previewImage) {
+                previewImage.dom.src = '/' + this.cropperSizes[this.cropperSize].image.replace(/^\/+/g, '');
+            }
+        }
+    },
+    onRemoveCropperRecord: function(tf) {
+        Ext.MessageBox.confirm(_('imagecropper.remove.title'), _('imagecropper.remove.content'), (function(btn) {
+            if (btn === 'yes') {
+                this.fireEvent('select', {});
+
+                this.close();
+            }
+        }).bind(this));
+    },
+    onUpdateCropperSize: function(tf) {
+        if (this.isInitialized()) {
+            if (tf.getValue().value) {
+                this.cropperSize = tf.getValue().value;
+
+                this.onResetCropperSize();
+            }
+        }
+    },
+    onResetCropperSize: function() {
+        if (this.isInitialized()) {
+            var data = this.getCropperSizeData();
 
             if (data) {
-                this.cropperImageSize.update(_('imagecropper.property.original', {
-                    width   : this.cropper.getImageData().naturalWidth,
-                    height  : this.cropper.getImageData().naturalHeight
-                }));
+                if (data.ratio) {
+                    this.cropper.setAspectRatio(data.ratio);
+                }
 
-                this.cropperFieldCropWidth.setValue(data.width);
-                this.cropperFieldCropHeight.setValue(data.height);
-            }
-        }
-    },
-    onUpdateCropperHistory: function() {
-        if (this.isInitialized()) {
-            if (!this.cropperHistory[this.cropperSize]) {
-                this.cropperHistory[this.cropperSize] = this.getCropperData(this.cropper.getData());
-            }
-        }
-    },
-    onResetCropper: function() {
-        if (this.isInitialized()) {
-            if (this.cropperHistory[this.cropperSize]) {
-                this.cropper.setData(this.cropperHistory[this.cropperSize]);
+                if (data.image) {
+                    data.width  = data.canvasWidth || data.width;
+                    data.height = data.canvasHeight || data.height;
+                } else {
+                    data.width  = NaN;
+                    data.height = NaN;
+                }
+
+                this.cropper.setData(data);
             }
 
             this.setCropperState('ready');
@@ -629,34 +658,34 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
     },
     onUpdateCropperRecord: function() {
         if (this.isInitialized()) {
-            var size = this.getCropperSize(this.cropperSize);
+            var data = {};
+
+            Ext.apply(data, this.getCropperSizeData());
+            Ext.apply(data, this.getCropperCanvasData());
 
             MODx.Ajax.request({
                 url         : ImageCropper.config.connector_url,
                 params      : {
                     action          : 'mgr/crop',
                     resource        : this.resource,
-                    image           : this.record.image,
-                    imageWidth      : this.cropperData.imageWidth,
-                    imageHeight     : this.cropperData.imageHeight,
-                    cropWidth       : size.width,
-                    cropHeight      : size.height,
-                    canvasWidth     : this.cropperData.canvasWidth,
-                    canvasHeight    : this.cropperData.canvasHeight,
-                    x               : this.cropperData.x,
-                    y               : this.cropperData.y
+                    image           : this.cropperRecord.image,
+                    imageWidth      : data.imageWidth,
+                    imageHeight     : data.imageHeight,
+                    cropWidth       : data.width,
+                    cropHeight      : data.height,
+                    canvasWidth     : data.canvasWidth,
+                    canvasHeight    : data.canvasHeight,
+                    x               : data.x,
+                    y               : data.y
                 },
                 listeners   : {
                     'success'   : {
                         fn          : function(result) {
-                            var cropperData = this.cropperData;
+                            data.image = result.object.image;
 
-                            cropperData.width   = result.object.width;
-                            cropperData.height  = result.object.height;
-                            cropperData.image   = result.object.image;
+                            this.setCropperSizeData(data);
 
-                            this.setCropperSizeData(this.cropperSize, cropperData);
-                            this.setCropperSizePreview(this.cropperSize, cropperData.image);
+                            this.onUpdateCropperImage();
 
                             this.setCropperState('saved');
                         },
@@ -673,68 +702,10 @@ Ext.extend(ImageCropper.window.CropImage, MODx.Window, {
 
             this.setCropperState('saving');
         }
-    },
-    getCropperData: function(event) {
-        return {
-            imageWidth      : this.cropper.getImageData().naturalWidth,
-            imageHeight     : this.cropper.getImageData().naturalHeight,
-            canvasWidth     : Math.round(event.width),
-            canvasHeight    : Math.round(event.height),
-            x               : Math.round(event.x),
-            y               : Math.round(event.y)
-        };
-    },
-    setCropperSizePreview: function(size, image) {
-        var preview = Ext.get('imagecropper-preview-' + size);
-
-        if (preview) {
-            preview.dom.src = '/' + image.replace(/^\/+/g, '');
-        }
     }
 });
 
 Ext.reg('imagecropper-window-crop-image', ImageCropper.window.CropImage);
-
-ImageCropper.combo.Size = function(config) {
-    config = config || {};
-
-    var data = [];
-
-    if (!config.sizes[config.value]) {
-        config.value = Object.keys(config.sizes)[0];
-    }
-
-    for (var key in config.sizes) {
-        var size = config.sizes[key];
-
-        if (size.size.match(/^([0-9]+)x([0-9]+)$/)) {
-            data.push([key, size.size, size.name]);
-        }
-    }
-
-    Ext.applyIf(config, {
-        store       : new Ext.data.ArrayStore({
-            mode        : 'local',
-            fields      : ['key', 'size', 'label'],
-            data        : data
-        }),
-        hiddenName  : 'size',
-        valueField  : 'key',
-        displayField : 'label',
-        mode        : 'local',
-        tpl         : new Ext.XTemplate('<tpl for=".">' +
-            '<div class="x-combo-list-item">' +
-                '{label:htmlEncode} <span style="font-style: italic;">({size:htmlEncode})</span>' +
-            '</div>' +
-        '</tpl>')
-    });
-
-    ImageCropper.combo.Size.superclass.constructor.call(this, config);
-};
-
-Ext.extend(ImageCropper.combo.Size, MODx.combo.ComboBox);
-
-Ext.reg('imagecropper-combo-size', ImageCropper.combo.Size);
 
 ImageCropper.combo.Preview = function(config) {
     config = config || {};
@@ -745,9 +716,7 @@ ImageCropper.combo.Preview = function(config) {
         config.value = Object.keys(config.sizes)[0];
     }
 
-    for (var key in config.sizes) {
-        var size = config.sizes[key];
-
+    Ext.iterate(config.sizes, function(key, size) {
         if (size.size.match(/^([0-9]+)x([0-9]+)$/)) {
             var preview = config.record.image || '';
 
@@ -764,7 +733,7 @@ ImageCropper.combo.Preview = function(config) {
                 checked     : key === config.value
             });
         }
-    }
+    });
 
     config.value = null;
 

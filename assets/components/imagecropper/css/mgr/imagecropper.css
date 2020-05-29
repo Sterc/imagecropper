@@ -18,34 +18,44 @@
     content: "";
 }
 
-.x-window-imagecropper .x-window-imagecropper-previews {
-    padding: 0 15px 15px 15px;
-    border-right: 1px solid #e4e4e4;
+.x-window-imagecropper .x-fieldset {
+    border: 0;
+    margin-top: 0;
 }
 
-.x-window-imagecropper .x-window-imagecropper-details {
-    padding: 15px;
-    border-left: 1px solid #e4e4e4;
-}
-
-.x-window-imagecropper .x-window-imagecropper-details #imagecropper-property-canvas {
+.x-window-imagecropper .x-fieldset .x-fieldset-header {
+    padding: 0;
     color: #555555;
     font-size: 13px;
     font-weight: bold;
-}
-
-.x-window-imagecropper .x-window-imagecropper-details .x-form-item {
     margin: 0 0 10px;
 }
 
-.x-window-imagecropper .x-window-imagecropper-details .x-form-item:last-child {
-    margin: 0;
+.x-window-imagecropper .x-fieldset .x-fieldset-body {
+    padding: 0;
+}
+
+.x-window-imagecropper .x-fieldset .x-fieldset-body .x-form-item {
+    margin: 0 0 10px;
+    padding: 0 !important;
+}
+
+.x-window-imagecropper .x-window-imagecropper-previews {
+    padding: 15px 7px 15px 15px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-image {
+    padding: 8px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-details {
+    padding: 15px 15px 15px 7px;
 }
 
 .x-window-imagecropper .x-window-imagecropper-state {
     color: #555555;
     font-size: 13px;
-    margin: 10px 0 0;
+    margin: 0 0 10px;
 }
 
 .x-window-imagecropper .x-window-imagecropper-state.loading {
@@ -72,6 +82,10 @@
     background: none;
 }
 
+.x-window-imagecropper .x-window-imagecropper-toolbar .x-btn-text .icon {
+    margin: 0;
+}
+
 .x-form-imagecropper-preview {
     margin: 7px 0 0;
 }
@@ -79,17 +93,23 @@
 .x-form-imagecropper-preview .x-form-imagecropper-preview-image {
     position: relative;
     display: inline-block;
+    width: 150px;
     height: 150px;
     margin: 0 15px 0 0;
+    overflow: hidden;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 }
 
 .x-form-imagecropper-preview .x-form-imagecropper-preview-image img {
+    position: relative;
+    left: 50%;
     display: block;
     width: auto;
     height: 100%;
+    transform: translateX(-50%);
 }
 
-.x-form-imagecropper-preview .x-form-imagecropper-preview-image span {
+.x-form-imagecropper-preview .x-form-imagecropper-preview-image .x-form-imagecropper-preview-image-title {
     position: absolute;
     bottom: 0;
     left: 0;
@@ -103,6 +123,20 @@
     background: rgba(255, 255, 255, 0.7);
 }
 
+.x-form-imagecropper-preview .x-form-imagecropper-preview-image .x-form-imagecropper-preview-image-properties {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    color: #555;
+    font-size: 11px;
+    text-decoration: none;
+    text-align: center;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
 .x-form-imagecropper-sets .x-form-item:first-child {
     padding-top: 0 !important;
 }
@@ -113,10 +147,14 @@
 
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label {
     position: relative;
+    width: 100%;
+    height: 120px;
     padding: 0;
-    border: 2px solid transparent;
+    border: 2px solid #e4e4e4;
     border-radius: 4px;
     overflow: hidden;
+    box-sizing: border-box;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
 }
 
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label:before {
@@ -124,9 +162,15 @@
 }
 
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label img {
+    position: relative;
+    top: 50%;
+    left: 50%;
     display: block;
-    width: 100%;
+    width: auto;
     height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    transform: translate(-50%, -50%);
 }
 
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label span {
@@ -144,5 +188,5 @@
 }
 
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-radio:checked + .x-form-cb-label {
-    border: 2px solid #3697cd;
+    border-color: #3697cd;
 }
