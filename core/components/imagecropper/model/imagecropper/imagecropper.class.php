@@ -50,7 +50,7 @@ class ImageCropper
             'css_url'               => $assetsUrl . 'css/',
             'assets_url'            => $assetsUrl,
             'connector_url'         => $assetsUrl . 'connector.php',
-            'version'               => '1.3.0',
+            'version'               => '1.3.1',
             'crop_path'             => $this->modx->getOption('imagecropper.crop_path'),
             'auto_open_cropper'     => (bool) $this->modx->getOption('imagecropper.auto_open_cropper')
         ], $config);

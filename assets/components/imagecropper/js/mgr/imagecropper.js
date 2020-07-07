@@ -17,15 +17,29 @@ ImageCropper = new ImageCropper();
 ImageCropper.combo.Browser = function(config) {
     config = config || {};
 
+    if (config.sizes) {
+        if (typeof config.sizes === 'string') {
+            config.sizes = Ext.decode(config.sizes);
+        }
+    }
+
+    if (config.previews) {
+        if (typeof config.previews === 'string') {
+            config.previews = config.previews === 'true';
+        }
+    }
+
     Ext.applyIf(config, {
         width           : 400,
         trigger1Action  : 'file',
         trigger1Class   : 'x-form-image-trigger',
         trigger2Action  : 'crop',
         trigger2Class   : 'x-form-crop-trigger',
+        sizes           : config.sizes || {},
+        previews        : config.previews || true,
+        autoOpen        : ImageCropper.config.auto_open_cropper || false,
         source          : config.source || MODx.config.default_media_source,
-        resource        : config.resource || '0',
-        autoOpen        : config.autoOpen || false
+        resource        : config.resource || '0'
     });
 
     ImageCropper.combo.Browser.superclass.constructor.call(this, config);

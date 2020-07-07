@@ -48,4 +48,33 @@ class ImageCropperPlugins extends ImageCropper
     {
         $this->modx->event->output($this->config['elements_path'] . 'tvs/options/');
     }
+
+    /**
+     * @access public.
+     * @param Array $properties.
+     */
+    public function OnClientSettingsRegisterSettings(array $properties = [])
+    {
+        $this->modx->controller->addLexiconTopic('imagecropper:clientsettings');
+
+        if (isset($properties['settings'])) {
+            $properties['settings']['imagecropper'] = [
+                'xtype'         => 'imagecropper-combo-browser',
+                'name'          => $this->modx->lexicon('clientsettings.imagecropper.name'),
+                'fields'        => [[
+                    'xtype'         => 'textfield',
+                    'name'          => 'sizes',
+                    'title'         => $this->modx->lexicon('clientsettings.imagecropper.label_sizes'),
+                    'description'   => $this->modx->lexicon('clientsettings.imagecropper.label_sizes_desc'),
+                    'value'         => '{"desktop": {"name": "Desktop", "size": "1000x500"}, "mobile": {"name": "Mobiel", "size": "768x500"}}'
+                ], [
+                    'xtype'         => 'modx-combo-boolean',
+                    'name'          => 'previews',
+                    'title'         => $this->modx->lexicon('clientsettings.imagecropper.label_previews'),
+                    'description'   => $this->modx->lexicon('clientsettings.imagecropper.label_previews_desc'),
+                    'value'         => 1
+                ]]
+            ];
+        }
+    }
 }

@@ -1,7 +1,7 @@
 --------------------
 ImageCropper
 --------------------
-Version: 1.3.0
+Version: 1.3.1
 Author: Oene Tjeerd de Bruin
-Contact: modx@oetzie.nl
+Contact: modx@sterc.nl
 --------------------

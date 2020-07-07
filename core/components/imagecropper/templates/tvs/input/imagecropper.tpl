@@ -10,10 +10,9 @@
                 var fld = MODx.load({
                     xtype       : 'imagecropper-combo-browser',
                     resource    : '{/literal}{$resource}{literal}',
-                    autoOpen    : {/literal}{$autoOpen}{literal},
                     source      : {/literal}{$source}{literal},
                     basePath    : '{/literal}{$basePath}{literal}',
-                    sizes       : Ext.decode('{/literal}{$sizes}{literal}'),
+                    sizes       : '{/literal}{$sizes}{literal}',
                     previews    : {/literal}{$previews}{literal},
                     applyTo     : 'tv{/literal}{$tv->id}{literal}'
                 });

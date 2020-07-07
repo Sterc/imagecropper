@@ -20,7 +20,6 @@ class ImageCropperInputRender extends modTemplateVarInputRender
 
         $this->setPlaceholder('sizes', $this->modx->getOption('sizes', $params, '[]'));
         $this->setPlaceholder('previews', (bool) $this->modx->getOption('previews', $params, 1) ? 'true' : 'false');
-        $this->setPlaceholder('autoOpen', (bool) $this->modx->ImageCropper->config['auto_open_cropper'] ? 'true' : 'false');
 
         if ($this->modx->resource) {
             $this->setPlaceholder('resource', $this->modx->resource->get('id'));
@@ -30,7 +29,6 @@ class ImageCropperInputRender extends modTemplateVarInputRender
             if ($source) {
                 $this->setPlaceholder('source', $source->get('id'));
                 $this->setPlaceholder('basePath', $source->getProperties()['basePath']['value']);
-
             }
         }
     }
