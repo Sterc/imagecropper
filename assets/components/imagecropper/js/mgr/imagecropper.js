@@ -145,7 +145,9 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
         });
 
         if (this.autoOpen) {
-            this.onTrigger2Click(event, btn);
+            setTimeout((function() {
+                this.onTrigger2Click(event, btn);
+            }).bind(this), 100);
         }
 
         return this;
