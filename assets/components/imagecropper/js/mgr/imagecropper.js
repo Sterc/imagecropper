@@ -153,13 +153,15 @@ Ext.extend(ImageCropper.combo.Browser, Ext.form.TwinTriggerField, {
     setValue: function(value) {
         var rawValue = this.getObjectRawValue(value);
 
-        this.el.dom.value = Ext.encode(rawValue);
+        setTimeout((function() {
+            this.el.dom.value = Ext.encode(rawValue);
 
-        if (rawValue.image) {
-            this.fakeEl.dom.value = rawValue.image.replace(this.basePath, '');
-        } else {
-            this.fakeEl.dom.value = '';
-        }
+            if (rawValue.image) {
+                this.fakeEl.dom.value = rawValue.image.replace(this.basePath, '');
+            } else {
+                this.fakeEl.dom.value = '';
+            }
+        }).bind(this), 100);
 
         this.onUpdatePreview(rawValue);
 
