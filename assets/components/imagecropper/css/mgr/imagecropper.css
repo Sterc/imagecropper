@@ -52,6 +52,10 @@
     padding: 15px 15px 15px 7px;
 }
 
+.x-window-imagecropper .x-window-imagecropper-details fieldset + fieldset {
+    margin-top: 15px;
+}
+
 .x-window-imagecropper .x-window-imagecropper-state {
     color: #555555;
     font-size: 13px;

@@ -19,9 +19,11 @@ $_lang['setting_imagecropper.auto_open_cropper_desc']   = 'Open the image crop w
 
 $_lang['imagecropper.property.y']                       = 'Lefttop Y';
 $_lang['imagecropper.property.x']                       = 'Lefttop X';
-$_lang['imagecropper.property.width']                   = 'Width';
-$_lang['imagecropper.property.height']                  = 'Height';
+$_lang['imagecropper.property.width']                   = 'Crop width';
+$_lang['imagecropper.property.height']                  = 'Crop height';
+$_lang['imagecropper.property.proportion']              = 'Ratio';
 $_lang['imagecropper.property.original']                = 'Original: [[+width]] x [[+height]]px';
+$_lang['imagecropper.options']                          = 'Image options';
 $_lang['imagecropper.advanced']                         = 'Advanced';
 $_lang['imagecropper.sets']                             = 'Select a crop';
 $_lang['imagecropper.save']                             = 'Create crop';

@@ -19,10 +19,12 @@ $_lang['setting_imagecropper.auto_open_cropper_desc']   = 'De afbeelding uitsned
 
 $_lang['imagecropper.property.y']                       = 'Linksboven Y';
 $_lang['imagecropper.property.x']                       = 'Linksboven X';
-$_lang['imagecropper.property.width']                   = 'Breedte';
-$_lang['imagecropper.property.height']                  = 'Hoogte';
+$_lang['imagecropper.property.width']                   = 'Uitsnede breedte';
+$_lang['imagecropper.property.height']                  = 'Uitsnede hoogte';
+$_lang['imagecropper.property.proportion']              = 'Verhouding';
 $_lang['imagecropper.property.original']                = 'Origineel: [[+width]] x [[+height]]px';
 $_lang['imagecropper.advanced']                         = 'Geavanceerd';
+$_lang['imagecropper.options']                          = 'Afbeelding opties';
 $_lang['imagecropper.sets']                             = 'Selecteer een uitsnede';
 $_lang['imagecropper.save']                             = 'Uitsnede maken';
 $_lang['imagecropper.reset']                            = 'Overnieuw';

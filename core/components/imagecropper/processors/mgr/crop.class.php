@@ -39,7 +39,7 @@ class ImageCropperCropProcessor extends modProcessor
                 $imageName      = substr($image, strrpos($image, '/') + 1);
                 $imageExtension = substr($image, strrpos($image, '.') + 1);
                 $imagePrefix    = substr($imageName, 0, strrpos($imageName, '.'));
-                $imageHash      = $this->getProperty('cropWidth') . $this->getProperty('cropHeight') . $this->getProperty('x') . $this->getProperty('y');
+                $imageHash      = $this->getProperty('cropWidth') . $this->getProperty('cropHeight') . $this->getProperty('x') . $this->getProperty('y') . $this->getProperty('scaleX') . $this->getProperty('scaleY');
 
                 if (empty($this->modx->ImageCropper->config['crop_path'])) {
                     $imagePath  = trim(substr($image, 0, strrpos($image, '/') + 1), '/') . '/imagecropper/';
@@ -61,6 +61,15 @@ class ImageCropperCropProcessor extends modProcessor
                     $cropImage      = rtrim($imagePath, '/') . '/' . $imagePrefix . '-' . md5($imageHash) . '.' . $imageExtension;
 
                     $source         = imagecreatefromstring(file_get_contents($base . $image));
+
+                    if ((int) $this->getProperty('scaleX') === -1) {
+                        imageflip($source, IMG_FLIP_HORIZONTAL);
+                    }
+
+                    if ((int) $this->getProperty('scaleY') === -1) {
+                        imageflip($source, IMG_FLIP_VERTICAL);
+                    }
+
                     $cropSource     = imagecreatetruecolor((int) $this->getProperty('cropWidth'), (int) $this->getProperty('cropHeight'));
                     $canvasSource   = imagecreatetruecolor((int) $this->getProperty('canvasWidth'), (int) $this->getProperty('canvasHeight'));
 

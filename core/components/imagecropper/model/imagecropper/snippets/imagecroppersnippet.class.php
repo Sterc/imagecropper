@@ -62,7 +62,7 @@ class ImageCropperSnippet extends ImageCropperSnippets
                 $field = $this->getProperty('field', null);
 
                 if ($field !== null) {
-                    if (isset($output[$field])) {
+                    if (isset($output[$field]['image'])) {
                         return $output[$field]['image'];
                     }
 
