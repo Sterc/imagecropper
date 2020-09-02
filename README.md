@@ -10,7 +10,7 @@ The following config will have 2 crops. A desktop crop with the size of 1200x500
 {"desktop": {"name": "Desktop", "size": "1200x500"}, "mobile": {"name": "Mobile", "size": "768x320"}}
 ```
 
-THe following config will have 2 crops. Both crops will have a ratio of 3x1 instead of a fixed size.
+The following config will have 2 crops. Both crops will have a ratio of 3x1 instead of a fixed size.
 ```
 {"desktop": {"name": "Desktop", "proportion": "3x1"}, "mobile" : {"name": "Mobile", "proportion": "3x1"}}
 ```
