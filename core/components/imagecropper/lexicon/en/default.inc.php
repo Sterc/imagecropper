@@ -39,6 +39,7 @@ $_lang['imagecropper.error_image_not_set']              = 'No image defined.';
 $_lang['imagecropper.error_image_not_exists']           = 'The defined image does not exist.';
 $_lang['imagecropper.error_image_not_valid']            = 'The defined image is not a correct file.';
 $_lang['imagecropper.error_image']                      = 'The crop could not be saved.';
+$_lang['imagecropper.error_crop']                       = 'Error while creating crop file.';
 $_lang['imagecropper.success_image']                    = 'Crop saved.';
 $_lang['imagecropper.default']                          = 'Original';
 $_lang['imagecropper.option_sets']                      = 'Crops';

@@ -39,6 +39,7 @@ $_lang['imagecropper.error_image_not_set']              = 'Er is geen afbeelding
 $_lang['imagecropper.error_image_not_exists']           = 'De opgegeven afbeelding bestaat niet.';
 $_lang['imagecropper.error_image_not_valid']            = 'De opgegeven afbeelding is geen correct bestand.';
 $_lang['imagecropper.error_image']                      = 'Er kon geen uitsnede opgeslagen worden.';
+$_lang['imagecropper.error_crop']                       = 'Fout bij aanmaken van gewasbestand.';
 $_lang['imagecropper.success_image']                    = 'Er is een uitsnede opgeslagen.';
 $_lang['imagecropper.default']                          = 'Orgineel';
 $_lang['imagecropper.option_sets']                      = 'Uitsnedes';
