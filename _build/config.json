@@ -3,7 +3,7 @@
     "lowCaseName": "imagecropper",
     "description": "An image cropper solution for MODx Revolution.",
     "author": "Sterc",
-    "version": "1.3.2-pl",
+    "version": "1.3.3-pl",
     "package":{
         "elements": {
             "chunks": [{

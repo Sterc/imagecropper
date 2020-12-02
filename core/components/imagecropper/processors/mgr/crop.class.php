@@ -22,6 +22,8 @@ class ImageCropperCropProcessor extends modProcessor
     {
         $this->modx->getService('ImageCropper', 'ImageCropper', $this->modx->getOption('imagecropper.core_path', null, $this->modx->getOption('core_path') . 'components/imagecropper/') . 'model/imagecropper/');
 
+        $this->_getSource();
+
         return parent::initialize();
     }
 
@@ -31,11 +33,34 @@ class ImageCropperCropProcessor extends modProcessor
      */
     public function process()
     {
+        $filename = (string)$this->getProperty('image');
+
+        // Remove site url
+        $siteUrl = $this->modx->getOption('site_url');
+        if (strpos($filename, $siteUrl) === 0) {
+            $filename = substr($filename, strlen($siteUrl));
+        }
+
+        // Remove source-specific base url
+        $baseUrl = $this->source->getBaseUrl();
+        $baseUrl = ltrim($baseUrl, '/');
+        $filename = ltrim($filename, '/');
+        if (strpos($filename, $baseUrl) === 0) {
+            $filename = substr($filename, strlen($baseUrl));
+        }
+
+        // Try to load the image
+        $file = $this->source->getObjectContents($filename);
+        $file = $file['content'];
+        if (empty($file)) {
+            return $this->failure('File ' . $filename . ' not found in source ' . $this->source->get('id'));
+        }
+
         $base   = rtrim($this->modx->getOption('base_path', null, MODX_BASE_PATH), '/') . '/';
-        $image  = '/' . ltrim($this->getProperty('image'), '/');
+        $image  = ltrim($this->getProperty('image'), '/');
 
         if (!empty($image)) {
-            if (file_exists($base . $image)) {
+            if (!empty($file)) {
                 $imageName      = substr($image, strrpos($image, '/') + 1);
                 $imageExtension = substr($image, strrpos($image, '.') + 1);
                 $imagePrefix    = substr($imageName, 0, strrpos($imageName, '.'));
@@ -51,16 +76,18 @@ class ImageCropperCropProcessor extends modProcessor
 
                 $imagePath = str_replace(array_keys($pathPlaceholders), array_values($pathPlaceholders), $imagePath);
 
-                if (!is_dir($base . $imagePath)) {
-                    if (!mkdir($base . $imagePath)) {
-                        return $this->failure($this->modx->lexicon('imagecropper.error_image'));
-                    }
-                }
+                /**
+                 * Make sure the upload path exists.
+                 * We unset errors to prevent issues if it already exists.
+                 */
+                $this->source->createContainer($imagePath, '/');
+                $this->source->errors = array();
 
                 if (in_array(strtolower($imageExtension), ['jpg', 'jpeg', 'png', 'gif'], true)) {
-                    $cropImage      = rtrim($imagePath, '/') . '/' . $imagePrefix . '-' . md5($imageHash) . '.' . $imageExtension;
+                    $cropName       = $imagePrefix . '-' . md5($imageHash) . '.' . $imageExtension;
+                    $cropImage      = rtrim($imagePath, '/') . '/' . $cropName;
 
-                    $source         = imagecreatefromstring(file_get_contents($base . $image));
+                    $source         = imagecreatefromstring($file);
 
                     if ((int) $this->getProperty('scaleX') === -1) {
                         imageflip($source, IMG_FLIP_HORIZONTAL);
@@ -69,7 +96,6 @@ class ImageCropperCropProcessor extends modProcessor
                     if ((int) $this->getProperty('scaleY') === -1) {
                         imageflip($source, IMG_FLIP_VERTICAL);
                     }
-
                     $cropSource     = imagecreatetruecolor((int) $this->getProperty('cropWidth'), (int) $this->getProperty('cropHeight'));
                     $canvasSource   = imagecreatetruecolor((int) $this->getProperty('canvasWidth'), (int) $this->getProperty('canvasHeight'));
 
@@ -86,28 +112,35 @@ class ImageCropperCropProcessor extends modProcessor
                     imagecopyresampled($canvasSource, $source, - (int) $this->getProperty('x'), - (int) $this->getProperty('y'), 0, 0, (int) $this->getProperty('imageWidth'), (int) $this->getProperty('imageHeight'), (int) $this->getProperty('imageWidth'), (int) $this->getProperty('imageHeight'));
                     imagecopyresampled($cropSource, $canvasSource, 0, 0, 0, 0, (int) $this->getProperty('cropWidth'), (int) $this->getProperty('cropHeight'), (int) $this->getProperty('canvasWidth'), (int) $this->getProperty('canvasHeight'));
 
+                    ob_start();
                     if (strtolower($imageExtension) === 'jpg') {
-                        $result = imagejpeg($cropSource, $base . $cropImage, 100);
+                        imagejpeg($cropSource);
                     } else if (strtolower($imageExtension) === 'jpeg') {
-                        $result = imagejpeg($cropSource, $base . $cropImage, 100);
+                        imagejpeg($cropSource);
                     } else if (strtolower($imageExtension) === 'png') {
-                        $result = imagepng($cropSource, $base . $cropImage, 9);
+                        imagepng($cropSource);
                     } else if (strtolower($imageExtension) === 'gif') {
-                        $result = imagegif($cropSource, $base . $cropImage);
-                    } else {
-                        $result = false;
+                        imagegif($cropSource);
                     }
+                    $result = ob_get_clean();
 
                     imagedestroy($source);
                     imagedestroy($cropSource);
                     imagedestroy($canvasSource);
 
                     if ($result) {
-                        return $this->success($this->modx->lexicon('imagecropper.success_image'), [
-                            'image'     => $cropImage,
-                            'width'     => $this->getProperty('cropWidth'),
-                            'height'    => $this->getProperty('cropHeight')
-                        ]);
+                        if ($this->source->createObject($imagePath, $cropName, $result)
+                            || $this->source->updateObject($imagePath, $cropName, $result)
+                        ) {
+                            $url = $this->source->getObjectUrl($imagePath . $cropName);
+                            return $this->success($this->modx->lexicon('imagecropper.success_image'), [
+                                'image'     => $url,
+                                'width'     => $this->getProperty('cropWidth'),
+                                'height'    => $this->getProperty('cropHeight')
+                            ]);
+                        }
+
+                        return $this->failure($this->modx->lexicon('imagecropper.error_crop'));
                     }
 
                     return $this->failure($this->modx->lexicon('imagecropper.error_image'));
@@ -136,6 +169,25 @@ class ImageCropperCropProcessor extends modProcessor
             '[[+username]]' => $this->modx->getUser()->get('username'),
             '[[+resource]]' => $this->getProperty('resource')
         ];
+    }
+
+    /**
+     * @return modMediaSource|null
+     */
+    public function _getSource() {
+        if ($this->source) return $this->source;
+
+        $id = $this->getProperty('source');
+
+        $this->modx->loadClass('sources.modMediaSource');
+        $this->source = modMediaSource::getDefaultSource($this->modx, $id);
+
+        if ($this->source) {
+            $this->source->getWorkingContext();
+            $this->source->initialize();
+            return $this->source;
+        }
+        return null;
     }
 }
 
