@@ -130,7 +130,7 @@ class ImageCropperCropProcessor extends modProcessor
 
                     if ($result) {
                         if ($this->source->createObject($imagePath, $cropName, $result)
-                            || $this->source->updateObject($imagePath, $cropName, $result)
+                            || $this->source->updateObject($imagePath . $cropName, $result)
                         ) {
                             $url = $this->source->getObjectUrl($imagePath . $cropName);
                             return $this->success($this->modx->lexicon('imagecropper.success_image'), [
