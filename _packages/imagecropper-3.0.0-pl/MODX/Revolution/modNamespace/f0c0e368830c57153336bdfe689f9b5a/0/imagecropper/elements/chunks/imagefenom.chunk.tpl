@@ -1,1 +1,0 @@
-<img src="{$desktop.image ?: $image}" srcset="{$mobile.image ?: $image} 768w, {$desktop.image ?: $image} 958w" sizes="(max-width: 767px) 768px, 958px" alt="{$alt}" />
