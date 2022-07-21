@@ -1,0 +1,12 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'vehicle_class' => 'xPDO\\Transport\\xPDOObjectVehicle',
+  'guid' => '6a1a4f3c0c6d3484bb119a1c38321972',
+  'package' => '',
+  'class' => 'MODX\\Revolution\\modSystemSetting',
+  'signature' => '4004b36e4b49e3105e5e0c3935e5a43b',
+  'native_key' => 'imagecropper.migration_hash',
+  'object' => '{"key":"imagecropper.migration_hash","value":"","xtype":"textfield","namespace":"imagecropper","area":"imagecropper","editedon":null}',
+);

@@ -1,0 +1,197 @@
+.x-form-field-wrap .x-form-twin-triggers {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+}
+
+.x-form-field-wrap .x-form-twin-triggers .x-form-trigger {
+    position: relative;
+    border-radius: 0;
+}
+
+.x-form-field-wrap .x-form-twin-triggers .x-form-trigger:last-of-type {
+    border-radius: 0 3px 3px 0;
+}
+
+.x-form-field-wrap .x-form-trigger.x-form-crop-trigger::before {
+    content: "";
+}
+
+.x-window-imagecropper .x-fieldset {
+    border: 0;
+    margin-top: 0;
+}
+
+.x-window-imagecropper .x-fieldset .x-fieldset-header {
+    padding: 0;
+    color: #555555;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 0 0 10px;
+}
+
+.x-window-imagecropper .x-fieldset .x-fieldset-body {
+    padding: 0;
+}
+
+.x-window-imagecropper .x-fieldset .x-fieldset-body .x-form-item {
+    margin: 0 0 10px;
+    padding: 0 !important;
+}
+
+.x-window-imagecropper .x-window-imagecropper-previews {
+    padding: 15px 7px 15px 15px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-image {
+    padding: 8px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-details {
+    padding: 15px 15px 15px 7px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-details fieldset + fieldset {
+    margin-top: 15px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-state {
+    color: #555555;
+    font-size: 13px;
+    margin: 0 0 10px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-state.loading {
+    position: relative;
+    padding: 0 0 0 25px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-state.loading:after {
+    position: absolute;
+    top: -1px;
+    left: 0;
+    display: block;
+    width: 20px;
+    height: 20px;
+    content: '';
+    background: url('../../images/mgr/loading.gif') no-repeat center center;
+    background-size: 80px;
+}
+
+.x-window-imagecropper .x-window-imagecropper-toolbar {
+    padding: 1px 0;
+    border: 0;
+    margin: 0;
+    background: none;
+}
+
+.x-window-imagecropper .x-window-imagecropper-toolbar .x-btn-text .icon {
+    margin: 0;
+}
+
+.x-form-imagecropper-preview {
+    margin: 7px 0 0;
+}
+
+.x-form-imagecropper-preview .x-form-imagecropper-preview-image {
+    position: relative;
+    display: inline-block;
+    width: 150px;
+    height: 150px;
+    margin: 0 15px 0 0;
+    overflow: hidden;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
+}
+
+.x-form-imagecropper-preview .x-form-imagecropper-preview-image img {
+    position: relative;
+    left: 50%;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transform: translateX(-50%);
+}
+
+.x-form-imagecropper-preview .x-form-imagecropper-preview-image .x-form-imagecropper-preview-image-title {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    color: #555;
+    font-size: 13px;
+    text-decoration: none;
+    text-align: center;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.x-form-imagecropper-preview .x-form-imagecropper-preview-image .x-form-imagecropper-preview-image-properties {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: block;
+    color: #555;
+    font-size: 11px;
+    text-decoration: none;
+    text-align: center;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.x-form-imagecropper-sets .x-form-item:first-child {
+    padding-top: 0 !important;
+}
+
+.x-form-imagecropper-sets .x-form-item .x-form-check-wrap.x-item-disabled {
+    opacity: .4;
+}
+
+.x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label {
+    position: relative;
+    width: 100%;
+    height: 120px;
+    padding: 0;
+    border: 2px solid #e4e4e4;
+    border-radius: 4px;
+    overflow: hidden;
+    box-sizing: border-box;
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQAQMAAAAlPW0iAAAAA3NCSVQICAjb4U/gAAAABlBMVEXMzMz////TjRV2AAAACXBIWXMAAArrAAAK6wGCiw1aAAAAHHRFWHRTb2Z0d2FyZQBBZG9iZSBGaXJld29ya3MgQ1M26LyyjAAAABFJREFUCJlj+M/AgBVhF/0PAH6/D/HkDxOGAAAAAElFTkSuQmCC');
+}
+
+.x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label:before {
+    display: none;
+}
+
+.x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label img {
+    position: relative;
+    top: 50%;
+    left: 50%;
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    transform: translate(-50%, -50%);
+}
+
+.x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-cb-label span {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: block;
+    color: #555;
+    font-size: 13px;
+    text-decoration: none;
+    text-align: center;
+    padding: 4px;
+    background: rgba(255, 255, 255, 0.7);
+}
+
+.x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-radio:checked + .x-form-cb-label {
+    border-color: #3697cd;
+}

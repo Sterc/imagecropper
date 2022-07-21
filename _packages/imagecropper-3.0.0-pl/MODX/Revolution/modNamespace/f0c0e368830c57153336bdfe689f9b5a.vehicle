@@ -1,0 +1,30 @@
+<?php return array (
+  'unique_key' => 'name',
+  'preserve_keys' => true,
+  'update_object' => true,
+  'resolve' => 
+  array (
+    0 => 
+    array (
+      'type' => 'file',
+      'body' => '{"source":"imagecropper-3.0.0-pl\\/MODX\\/Revolution\\/modNamespace\\/f0c0e368830c57153336bdfe689f9b5a\\/0\\/","target":"return MODX_CORE_PATH . \'components\\/\';","name":"imagecropper"}',
+    ),
+    1 => 
+    array (
+      'type' => 'file',
+      'body' => '{"source":"imagecropper-3.0.0-pl\\/MODX\\/Revolution\\/modNamespace\\/f0c0e368830c57153336bdfe689f9b5a\\/1\\/","target":"return MODX_ASSETS_PATH . \'components\\/\';","name":"imagecropper"}',
+    ),
+    2 => 
+    array (
+      'type' => 'php',
+      'body' => '{"type":"php","source":"imagecropper-3.0.0-pl\\/MODX\\/Revolution\\/modNamespace\\/f0c0e368830c57153336bdfe689f9b5a.gpm.resolve.bootstrap.resolver","name":"gpm.resolve.bootstrap"}',
+    ),
+  ),
+  'vehicle_class' => 'xPDO\\Transport\\xPDOObjectVehicle',
+  'guid' => 'de6f127da0e5b6a59aac5aed462c8b55',
+  'package' => '',
+  'class' => 'MODX\\Revolution\\modNamespace',
+  'signature' => 'f0c0e368830c57153336bdfe689f9b5a',
+  'native_key' => 'imagecropper',
+  'object' => '{"name":"imagecropper","path":"{core_path}components\\/imagecropper\\/","assets_path":"{assets_path}components\\/imagecropper\\/"}',
+);

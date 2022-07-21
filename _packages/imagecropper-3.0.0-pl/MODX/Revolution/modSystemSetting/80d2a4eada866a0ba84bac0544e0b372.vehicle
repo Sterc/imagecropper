@@ -1,0 +1,12 @@
+<?php return array (
+  'unique_key' => 'key',
+  'preserve_keys' => true,
+  'update_object' => false,
+  'vehicle_class' => 'xPDO\\Transport\\xPDOObjectVehicle',
+  'guid' => '6ec870f7d54fa83f96059d7fa32bdd69',
+  'package' => '',
+  'class' => 'MODX\\Revolution\\modSystemSetting',
+  'signature' => '80d2a4eada866a0ba84bac0544e0b372',
+  'native_key' => 'imagecropper.auto_open_cropper',
+  'object' => '{"key":"imagecropper.auto_open_cropper","value":"1","xtype":"combo-boolean","namespace":"imagecropper","area":"imagecropper","editedon":null}',
+);
