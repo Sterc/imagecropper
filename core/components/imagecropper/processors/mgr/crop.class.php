@@ -84,7 +84,13 @@ class ImageCropperCropProcessor extends modProcessor
                 $this->source->errors = array();
 
                 if (in_array(strtolower($imageExtension), ['jpg', 'jpeg', 'png', 'gif'], true)) {
-                    $cropName       = $imagePrefix . '-' . md5($imageHash) . '.' . $imageExtension;
+                    /* use md5 file hash in crop name */
+                    $fileHash = '';
+                    try {
+                        $fileHash = md5_file(MODX_BASE_PATH . $this->source->getObjectUrl($filename)) ?: '';
+                    } catch (\Exception $e) {}
+
+                    $cropName       = $imagePrefix . '-' . md5($imageHash . $fileHash) . '.' . $imageExtension;
                     $cropImage      = rtrim($imagePath, '/') . '/' . $cropName;
 
                     $source         = imagecreatefromstring($file);
