@@ -4,22 +4,18 @@ description: An image cropper solution for MODx Revolution.
 author: Sterc
 version: 3.0.0
 
-package:
-  elements:
-    chunks:
-    - name: imageCropperImageTpl
-      file: image.chunk.tpl
-    snippets:
-    - name: ImageCropper
-      file: imagecropper.snippet.php
-    plugins:
-    - name: ImageCropper
-      file: imagecropper.plugin.php
-      events:
-      - OnManagerPageInit
-      - OnTVInputRenderList
-      - OnTVInputPropertiesList
-      - OnClientSettingsRegisterSettings
+chunks:
+  - name: imageCropperImageTpl
+    file: image.chunk.tpl
+
+snippets:
+  - name: ImageCropper
+    file: imagecropper.snippet.php
+
+plugins:
+  - name: ImageCropper
+    file: imagecropper.plugin.php
+    events: ["OnManagerPageInit", "OnTVInputRenderList", "OnTVInputPropertiesList", "OnClientSettingsRegisterSettings"]
 
 systemSettings:
   - type: combo-boolean
