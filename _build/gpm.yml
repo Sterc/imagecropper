@@ -1,0 +1,43 @@
+name: ImageCropper
+lowCaseName: imagecropper
+description: An image cropper solution for MODx Revolution.
+author: Sterc
+version: 3.0.0
+
+package:
+  elements:
+    chunks:
+    - name: imageCropperImageTpl
+      file: image.chunk.tpl
+    snippets:
+    - name: ImageCropper
+      file: imagecropper.snippet.php
+    plugins:
+    - name: ImageCropper
+      file: imagecropper.plugin.php
+      events:
+      - OnManagerPageInit
+      - OnTVInputRenderList
+      - OnTVInputPropertiesList
+      - OnClientSettingsRegisterSettings
+
+systemSettings:
+  - type: combo-boolean
+    key: auto_open_cropper
+    value: '1'
+    area: imagecropper
+  - key: crop_path
+    value: assets/crops/
+    area: imagecropper
+  - key: migration_hash
+    area: imagecropper
+
+build:
+  readme: core/components/imagecropper/docs/readme.txt
+  license: core/components/imagecropper/docs/license.txt
+  changelog: core/components/imagecropper/docs/changelog.txt
+  resolver:
+    after:
+    - setupoptions.resolver.php
+    - stercextra.resolver.php
+  setupOptions: setup.options.php

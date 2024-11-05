@@ -6,6 +6,7 @@
  * Copyright 2019 by Sterc <modx@sterc.nl>
  */
 
+
 $package = 'ImageCropper';
 $url     = 'https://extras.sterc.nl/api/v1/packagedata';
 $params  = array();
@@ -17,7 +18,7 @@ $c->where(
         'workspace' => 1,
         "(SELECT
             `signature`
-            FROM {$modx->getTableName('modTransportPackage')} AS `latestPackage`
+            FROM {$modx->getTableName('transport.modTransportPackage')} AS `latestPackage`
             WHERE `latestPackage`.`package_name` = `modTransportPackage`.`package_name`
             ORDER BY
                 `latestPackage`.`version_major` DESC,
