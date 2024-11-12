@@ -2,7 +2,7 @@ name: ImageCropper
 lowCaseName: imagecropper
 description: An image cropper solution for MODx Revolution.
 author: Sterc
-version: 3.0.0
+version: 1.4.0
 
 chunks:
   - name: imageCropperImageTpl
