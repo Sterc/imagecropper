@@ -83,7 +83,7 @@ class ImageCropperCropProcessor extends modProcessor
                 $this->source->createContainer($imagePath, '/');
                 $this->source->errors = array();
 
-                if (in_array(strtolower($imageExtension), ['jpg', 'jpeg', 'png', 'gif'], true)) {
+                if (in_array(strtolower($imageExtension), ['jpg', 'jpeg', 'png', 'gif', 'webp'], true)) {
                     $cropName       = $imagePrefix . '-' . md5($imageHash) . '.' . $imageExtension;
                     $cropImage      = rtrim($imagePath, '/') . '/' . $cropName;
 
@@ -121,6 +121,8 @@ class ImageCropperCropProcessor extends modProcessor
                         imagepng($cropSource);
                     } else if (strtolower($imageExtension) === 'gif') {
                         imagegif($cropSource);
+                    } else if (strtolower($imageExtension) === 'webp') {
+                        imagewebp($cropSource);
                     }
                     $result = ob_get_clean();
 
