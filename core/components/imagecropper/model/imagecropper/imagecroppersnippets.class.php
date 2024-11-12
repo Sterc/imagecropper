@@ -72,14 +72,13 @@ class ImagecropperSnippets extends ImageCropper
         if (class_exists('pdoTools') && $pdo = $this->modx->getService('pdoTools')) {
             if ((bool) $this->getProperty('usePdoTools')) {
                 if ((bool) $this->getProperty('usePdoElementsPath')) {
-                    $elementsPath = $this->modx->getOption('pdotools_elements_path');
+                    return $pdo->getChunk($name, $properties);
                 } else {
                     $elementsPath = $this->getProperty('elementsPath', $this->config['core_path']);
+                    return $pdo->getChunk($name, array_merge([
+                        'elementsPath' => $elementsPath
+                    ], $properties));//pdoTools deprecated in 2.13.2-pl param 'elementsPath' throws MODX log errors but for BC this logic kept here, may be need refactor to setOption
                 }
-
-                return $pdo->getChunk($name, array_merge([
-                    'elementsPath' => $elementsPath
-                ], $properties));
             }
         }
 
