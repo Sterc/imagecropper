@@ -8,7 +8,7 @@ Version 1.4.0
 - Improved crops previews (PR#8)
 - Add WebP support (PR#22)
 - Avoid deprecated pdoTools log when elementsPath is not used (PR#19)
-- 
+- Fix updating of existing crop (PR#14)
 
 ---------------------
 Version: 1.3.3
