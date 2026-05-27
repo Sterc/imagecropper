@@ -18,7 +18,11 @@ class ImageCropperInputRender extends modTemplateVarInputRender
     {
         $this->modx->getService('ImageCropper', 'ImageCropper', $this->modx->getOption('imagecropper.core_path', null, $this->modx->getOption('core_path') . 'components/imagecropper/') . 'model/imagecropper/');
 
-        $this->setPlaceholder('sizes', $this->modx->getOption('sizes', $params, '[]'));
+        $sizes = $this->modx->getOption('sizes', $params, '[]');
+        if (is_array($sizes)) {
+            $sizes = json_encode($sizes);
+        }
+        $this->setPlaceholder('sizes', $sizes);
         $this->setPlaceholder('previews', (bool) $this->modx->getOption('previews', $params, 1) ? 'true' : 'false');
 
         if ($this->modx->resource) {
