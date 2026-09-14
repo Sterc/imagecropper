@@ -195,3 +195,7 @@
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-radio:checked + .x-form-cb-label {
     border-color: #3697cd;
 }
+
+.x-form-imagecropper-sets .x-form-check-wrap {
+  width: 278px!important;
+}
