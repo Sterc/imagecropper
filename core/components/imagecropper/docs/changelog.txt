@@ -3,6 +3,12 @@ ImageCropper
 ----------------------
 
 ---------------------
+Version 1.4.1
+Released: [TBD - Not released yet]
+---------------------
+- Fix empty crop previews in MODX 3.2
+
+---------------------
 Version 1.4.0
 ---------------------
 - Improved crops previews (PR#8)
