@@ -195,3 +195,13 @@
 .x-form-imagecropper-sets .x-form-item .x-form-check-wrap .x-form-radio:checked + .x-form-cb-label {
     border-color: #3697cd;
 }
+
+/**
+ * MODX 3.2 sets radio group columns to `width: unset !important`, which lets the preview
+ * column grow far wider than the panel and pushes the preview images out of view.
+ */
+.x-form-item .x-form-imagecropper-sets.x-form-radio-group .x-column-inner,
+.x-form-item .x-form-imagecropper-sets.x-form-radio-group .x-column-inner .x-column {
+    display: block;
+    width: 100% !important;
+}
